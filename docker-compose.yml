@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  artist-metadata:
+    build: ./artist-metadata/
+    volumes:
+      - ./artist-metadata/:/usr/src/artist-metadata/
+    ports:
+    - 3000:3000
+    depends_on:
+    - database
+    environment:
+      PORT: 3000
+
+  database:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+    - "5433:5432"
+
+  testdatabase:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - test-db-data:/var/lib/postgresql/data
+    ports:
+    - "5442:5432"
+
+
+
+volumes:
+  db-data:
+  test-db-data:
